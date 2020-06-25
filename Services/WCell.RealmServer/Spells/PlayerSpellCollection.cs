@@ -179,7 +179,7 @@ namespace WCell.RealmServer.Spells
 					SpellHandler.SendLearnedSpell(owner.Client, spell.Id);
 					if (!spell.IsPassive)
 					{
-						SpellHandler.SendVisual(owner, 362);	// ouchy: Unnamed constants 
+						SpellHandler.SendImpact(owner, 362);	// ouchy: Unnamed constants 
 					}
 				}
 

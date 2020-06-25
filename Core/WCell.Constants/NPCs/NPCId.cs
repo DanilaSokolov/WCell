@@ -124567,6 +124567,11 @@ namespace WCell.Constants.NPCs
 		/// Level: 83
 		/// Rank: Elite
 		/// </summary>
+		Sindragosa_0 = 36853,
+		/// <summary>
+		/// Level: 83
+		/// Rank: Elite
+		/// </summary>
 		LadyDeathwhisper = 36855,
 		/// <summary>
 		/// Level: 80
@@ -126453,6 +126458,11 @@ namespace WCell.Constants.NPCs
 		/// Level: 1
 		/// </summary>
 		GreenDragonCombatTrigger = 38752,
+		/// <summary>
+		/// Level: 80
+		/// Rank: Elite
+		/// </summary>
+		HighlordTirionFordring_13 = 38995,
 		/// <summary>
 		/// Level: 1
 		/// </summary>

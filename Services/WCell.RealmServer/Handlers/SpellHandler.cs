@@ -83,11 +83,11 @@ namespace WCell.RealmServer.Spells
 
 		public static void SendLearnedSpell(IPacketReceiver client, uint spellId)
 		{
-			using (var packet = new RealmPacketOut(RealmServerOpCode.SMSG_LEARNED_SPELL, 4))
+			using (var packet = new RealmPacketOut(RealmServerOpCode.SMSG_LEARNED_SPELL, 6))
 			{
 				packet.WriteUInt(spellId);
 				packet.WriteUShort(0); // 3.3.3a
-
+					
 				client.Send(packet);
 			}
 		}

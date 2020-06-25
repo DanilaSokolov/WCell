@@ -1,14 +1,21 @@
 using System;
+using WCell.Addons.Default.Lang;
+using WCell.Constants.GameObjects;
 using WCell.Constants.NPCs;
 using WCell.Constants.Spells;
 using WCell.Core.Initialization;
 using WCell.RealmServer.AI.Actions.Combat;
 using WCell.RealmServer.AI.Brains;
 using WCell.RealmServer.Entities;
+using WCell.RealmServer.GameObjects;
+using WCell.RealmServer.GameObjects.GOEntries;
+using WCell.RealmServer.Gossips;
 using WCell.RealmServer.Instances;
 using WCell.RealmServer.NPCs;
 using WCell.RealmServer.Spells;
+using WCell.RealmServer.Transports;
 using WCell.Util;
+using WCell.Util.Graphics;
 
 namespace WCell.Addons.Default.Instances
 {
@@ -17,6 +24,70 @@ namespace WCell.Addons.Default.Instances
     {
         #region Setup Content
         private static NPCEntry MarrowgarEntry;
+        private static NPCEntry LadyDeathWhisperEntry;
+        private static NPCEntry DeathbringerSaurfangEntry;
+        private static NPCEntry FestergutEntry;
+        private static NPCEntry RotfaceEntry;
+        private static NPCEntry ProfessorPutricideEntry;
+        private static NPCEntry BloodQueenLanathelEntry;
+        private static NPCEntry ValithriaDreamwalkerEntry;
+        private static NPCEntry SindragosaEntry;
+        private static NPCEntry tirionForndringEntry;
+        private static NPCEntry TheLichKingEntry;
+
+        private static NPCEntry _muradinBranzaborod;
+
+        private static GOEntry scourgeTransporter;
+
+        public static GOEntry iceWall;
+        public static NPCEntry skyBreaker;
+        #region 
+        public static Vector3[] MuradinExitPath =
+       {
+            new Vector3(8.130936f, -0.2699585f, 20.31728f ),
+            new Vector3(6.380936f, -0.2699585f, 20.31728f ),
+            new Vector3(3.507703f, 0.02986573f, 20.78463f ),
+            new Vector3(-2.767633f, 3.743143f, 20.37663f ),
+            new Vector3(-4.017633f, 4.493143f, 20.12663f ),
+            new Vector3(-7.242224f, 6.856013f, 20.03468f ),
+            new Vector3(-7.742224f, 8.606013f, 20.78468f ),
+            new Vector3(-7.992224f, 9.856013f, 21.28468f ),
+            new Vector3(-12.24222f, 23.10601f, 21.28468f ),
+            new Vector3(-14.88477f, 25.20844f, 21.59985f )
+        };
+
+        public static Vector3[] SaurfangExitPath =
+        {
+            new Vector3(30.43987f, 0.1475817f, 36.10674f ),
+            new Vector3(21.36141f, -3.056458f, 35.42970f ),
+            new Vector3(19.11141f, -3.806458f, 35.42970f ),
+            new Vector3(19.01736f, -3.299440f, 35.39428f ),
+            new Vector3(18.6747f, -5.862823f, 35.66611f ),
+            new Vector3(18.6747f, -7.862823f, 35.66611f ),
+            new Vector3(18.1747f, -17.36282f, 35.66611f ),
+            new Vector3(18.1747f, -22.61282f, 35.66611f ),
+            new Vector3(17.9247f, -24.36282f, 35.41611f ),
+            new Vector3(17.9247f, -26.61282f, 35.66611f ),
+            new Vector3(17.9247f, -27.86282f, 35.66611f ),
+            new Vector3(17.9247f, -29.36282f, 35.66611f ),
+            new Vector3(15.33203f, -30.42621f, 35.93796f )
+        };
+        #endregion
+
+        [Initialization]
+        [DependentInitialization(typeof(GOMgr))]
+        public static void InitGOs()
+        {
+            scourgeTransporter = GOMgr.GetEntry(GOEntryId.ScourgeTransporter_3);
+            scourgeTransporter.DefaultGossip = new GossipMenu(1,
+                new MultiStringGossipMenuItem(DefaultAddonLocalizer.Instance.GetTranslations(AddonMsgKey.NPCTiare),
+                    convo => convo.Speaker.SpellCast.Trigger(SpellId.UpperSpireTeleport, convo.Character))
+                );
+
+            iceWall = GOMgr.GetEntry(GOEntryId.IceWall_2);
+                        
+
+        }
 
         [Initialization]
         [DependentInitialization(typeof(NPCMgr))]
@@ -28,6 +99,40 @@ namespace WCell.Addons.Default.Instances
             {
                 ((BaseBrain)marrowgar.Brain).DefaultCombatAction.Strategy = new MarrowgarAIAttackAction(marrowgar);
             };
+
+            skyBreaker = NPCMgr.GetEntry(NPCId.TheSkybreaker_2);
+            skyBreaker.Create();
+
+            LadyDeathWhisperEntry = NPCMgr.GetEntry(NPCId.LadyDeathwhisper);
+
+            DeathbringerSaurfangEntry = NPCMgr.GetEntry(NPCId.DeathbringerSaurfang);
+
+            FestergutEntry = NPCMgr.GetEntry(NPCId.Festergut);
+
+            _muradinBranzaborod = NPCMgr.GetEntry(NPCId.MuradinBronzebeard_2);
+            _muradinBranzaborod.DefaultGossip = new GossipMenu(1,
+                new MultiStringGossipMenuItem(DefaultAddonLocalizer.Instance.GetTranslations(AddonMsgKey.NPCTiare),
+                    convo => convo.Speaker.SpellCast.Trigger(SpellId.FrozenThroneTeleport, convo.Character))
+                );
+
+
+            RotfaceEntry = NPCMgr.GetEntry(NPCId.Rotface);
+
+            ProfessorPutricideEntry = NPCMgr.GetEntry(NPCId.ProfessorPutricide);
+
+            BloodQueenLanathelEntry = NPCMgr.GetEntry(NPCId.BloodQueenLanaThel_2);
+
+            ValithriaDreamwalkerEntry = NPCMgr.GetEntry(NPCId.ValithriaDreamwalker);
+
+            SindragosaEntry = NPCMgr.GetEntry(NPCId.Sindragosa_0);
+
+            tirionForndringEntry = NPCMgr.GetEntry(NPCId.HighlordTirionFordring_13);
+            tirionForndringEntry.DefaultGossip = new GossipMenu(1,
+                new MultiStringGossipMenuItem(DefaultAddonLocalizer.Instance.GetTranslations(AddonMsgKey.NPCTiare),
+                    convo => convo.Speaker.SpellCast.Trigger(SpellId.FrozenThroneTeleport, convo.Character))
+                );
+
+            TheLichKingEntry = NPCMgr.GetEntry(NPCId.TheLichKing_18);
         }
         #endregion
     }
@@ -36,6 +141,13 @@ namespace WCell.Addons.Default.Instances
     public class MarrowgarBrain : MobBrain
     {
         public MarrowgarBrain(NPC marrowgar) : base(marrowgar) { }
+
+        public override void OnDeath()
+        {
+            base.OnDeath();
+
+
+        }
     }
 
     public class MarrowgarAIAttackAction : AIAttackAction

@@ -24,15 +24,18 @@ namespace WCell.Addons.Default.Instances
 	{
 		#region Static Settings
 		private static NPCEntry princeKelesethEntry;
+
+		private static NPCEntry ingvardEntry;
+
 		public const int PrinceSkeletonCount = 5;
 		internal static NPCEntry PrinceSkeletonEntry;
 		private static readonly Vector3[] PrinceSkeletonPositions = new[]
         { 
-            new Vector3(156.2559f, 259.2093f, 42.8668f),
-            new Vector3(156.2559f, 259.2093f, 42.8668f),
-            new Vector3(156.2559f, 259.2093f, 42.8668f),
-            new Vector3(156.2559f, 259.2093f, 42.8668f),
-            new Vector3(156.2559f, 259.2093f, 42.8668f)
+            new Vector3(156.2559f, 259.2093f, 42.8684f),
+            new Vector3(156.2559f, 259.2093f, 42.8684f),
+            new Vector3(156.2559f, 259.2093f, 42.8684f),
+            new Vector3(156.2559f, 259.2093f, 42.8684f),
+            new Vector3(156.2559f, 259.2093f, 42.8684f)
         };
 		private static readonly NPCSpawnEntry[] PrinceSkeletonSpawnEntries = new NPCSpawnEntry[PrinceSkeletonCount];
 		private static NPCEntry dragonflayerIronhelm;
@@ -69,6 +72,23 @@ namespace WCell.Addons.Default.Instances
 			dragonflayerIronhelm.AddSpell(SpellId.HeroicStrike_9);
 			SpellHandler.Apply(spell => { spell.CooldownTime = 5000; },
 				SpellId.HeroicStrike_9);
+
+
+            //Ingvard
+            ingvardEntry = NPCMgr.GetEntry(NPCId.IngvarThePlunderer);
+			ingvardEntry.BrainCreator = ingvarthePlunderer => new IngvarThePlundererBrain(ingvarthePlunderer);
+
+			ingvardEntry.Activated += ingvar =>
+			{
+				var instance = ingvar.Map as UtgardeKeep;
+				if (instance == null || ingvar.SpawnPoint == null) return;
+
+				((BaseBrain)ingvar.Brain).DefaultCombatAction.Strategy = new IngvarThePlundererAttackAction(ingvar);
+
+			};
+
+			
+
 		}
 
 		#endregion
@@ -436,25 +456,69 @@ namespace WCell.Addons.Default.Instances
 
 			void CastDecrepify(WorldObject owner)
 			{
+                Character chr = owner.GetNearbyRandomHostileCharacter();
 
-				owner.Yell("Hi");
+                if (chr != null)
+                {
+                    m_owner.SpellCast.Start(decrepify, false, chr);
+                }
 
-				//Character chr = owner.GetNearbyRandomHostileCharacter();
-
-				//if (chr != null)
-				//{
-				//    m_owner.SpellCast.Start(decrepify, false, chr);
-				//}
-
-			}
+            }
 		}
 
-		#endregion
+        #endregion
 
-		#endregion
+        #endregion
 
-		#region Overrides
-		protected override void SpawnNPCs()
+        #region Ingvar
+        public class IngvarThePlundererBrain : MobBrain
+        {
+			const int SOUND_ATTACK = 13242;
+			const int SOUND_DEATH = 13213;
+
+			[Initialization(InitializationPass.Second)]
+			public static void InitIngvarThrePlunderer()
+			{
+
+			}
+
+            public IngvarThePlundererBrain(NPC ingvardThePlunderer) 
+				: base(ingvardThePlunderer)
+            {
+            }
+
+			public override void OnEnterCombat()
+			{
+				
+				base.OnEnterCombat();
+				m_owner.PlaySound(SOUND_ATTACK);
+			}
+
+			public override void OnDeath()
+			{
+				m_owner.PlaySound(SOUND_DEATH);
+				base.OnDeath();
+			}
+
+		}
+
+		public class IngvarThePlundererAttackAction : AIAttackAction
+        {
+			[Initialization(InitializationPass.Second)]
+			public static void InitIngvarThePlunderer()
+			{
+			}
+
+			public IngvarThePlundererAttackAction(NPC ingvar)
+				: base(ingvar)
+			{
+			}
+
+		}
+        #endregion
+
+        #region Overrides
+        protected override void SpawnNPCs()
 		{
 			base.SpawnNPCs();
 		}

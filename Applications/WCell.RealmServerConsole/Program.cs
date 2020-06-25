@@ -16,6 +16,7 @@
 
 using System.Runtime;
 using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using WCell.RealmServer.Content;
 
@@ -41,6 +42,7 @@ namespace WCell.RealmServerConsole
 			ContentMgr.ForceDataPresence = true;
 			RealmServer.Program.Start();
 			RealmServerConsole.Run();
+
 		}
 	}
 }

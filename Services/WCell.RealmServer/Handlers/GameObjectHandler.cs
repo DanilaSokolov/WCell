@@ -1,4 +1,5 @@
 using WCell.Constants;
+using WCell.Constants.Achievements;
 using WCell.Constants.GameObjects;
 using WCell.Core.Network;
 using WCell.RealmServer.Entities;
@@ -63,6 +64,28 @@ namespace WCell.RealmServer.GameObjects
 				go.Use(client.ActiveCharacter);
 			}
 		}
+
+        /// <summary>
+        /// TODO: Write summary
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="packet"></param>
+        [ClientPacketHandler(RealmServerOpCode.CMSG_GAMEOBJ_REPORT_USE)]
+        public static void HandleGameObjectReportUser(IRealmClient client, RealmPacketIn packet)
+        {
+            var goId = packet.ReadEntityId();
+
+            var chr = client.ActiveCharacter;
+            var go = chr.Map.GetObject(goId) as GameObject;
+
+            if (go == null)
+                return;
+
+            if (!go.IsCloseEnough(chr, 5.0f)) // TODO: check if interaction distance is already defined somewhere
+                return;
+
+            chr.Achievements.CheckPossibleAchievementUpdates(AchievementCriteriaType.UseGameobject);
+        }
 
         public static void SendGameObjectInfo(IRealmClient client, GOEntry entry)
         {

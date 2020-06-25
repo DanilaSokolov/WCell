@@ -21,6 +21,14 @@ namespace WCell.RealmServer.RacesClasses
 		}
 
 		/// <summary>
+		/// DKs got 165, see base.IntroductionMovie
+		/// </summary>
+		public override uint IntroductionMovie
+		{
+			get { return 165; }
+		}
+
+		/// <summary>
 		/// Calculates attack power for the class at a specific level, Strength and Agility.
 		/// </summary>
 		/// <param name="level">the player's level</param>

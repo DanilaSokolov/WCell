@@ -19,6 +19,7 @@ namespace WCell.RealmServer.RacesClasses
 				MaleDisplayId = GetUInt32(rawData, 4),
 				FemaleDisplayId = GetUInt32(rawData, 5),
 				Scale = GetFloat(rawData, 7),
+				IntroductionMovie = GetUInt32(rawData, 12),
 				Name = GetString(rawData, 14),
 				ClientId = (ClientId)GetUInt32(rawData, 68)
 			};

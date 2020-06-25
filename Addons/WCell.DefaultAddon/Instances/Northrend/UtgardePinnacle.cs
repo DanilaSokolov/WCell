@@ -1,6 +1,7 @@
 using WCell.Constants;
 using WCell.Constants.AreaTriggers;
 using WCell.Constants.Misc;
+using WCell.Constants.NPCs;
 using WCell.Constants.Spells;
 using WCell.Core.Initialization;
 using WCell.RealmServer.AI;
@@ -86,18 +87,27 @@ namespace WCell.Addons.Default.Instances
 						m_arthasMirror.SpellCast.TriggerSingle(SpellId.ArthasTransformingSvala, m_svala);
 
 						m_svala.CallDelayed(7000, o3 =>
-						{
-							//m_owner.SpellCast.Cancel();
-							//svala.Auras.AddSelf(SpellId.ArthasTransformingSvala, true); //wrong id
+						{							
+                            //m_svala.Auras.CreateSelf(SpellId.ArthasTransformingSvala, true); //wrong id
+							m_arthasMirror.SpellCast.Cancel();
 
 							m_svala.CallDelayed(3000, o4 =>
 							{
 								m_svala.Yell("The sensation is... beyond my imagining. I am yours to command, my king");
 								m_svala.PlaySound(13857);
 								m_svala.Invulnerable--;
+								m_svala.SetEntry(NPCId.SvalaSorrowgrave);
 
-								// reactivate everyone
-								IsAIFrozen = false;
+								m_arthasMirror.IdleThenExecute(8500, () =>
+								{
+									m_arthasMirror.Yell("“вое первое испытание ждет. ”ничтожь наших непрошеных гостей.");
+									m_arthasMirror.PlaySound(14733);
+									// reactivate everyone
+									IsAIFrozen = false;
+									m_arthasMirror.Delete();
+								});
+
+								
 							});
 						});
 					});

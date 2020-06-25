@@ -767,9 +767,6 @@ namespace WCell.RealmServer.NPCs
 			// Charge for the spell
 			chr.Money -= trainerSpell.GetDiscountedCost(chr, trainer);
 
-			// Send a success packet to the client.
-			NPCHandler.SendTrainerBuySucceeded(chr.Client, trainer, trainerSpell);
-
 			// spell visual (Silence effect)
 			SpellHandler.SendVisual(trainer, 179);
 
@@ -785,7 +782,7 @@ namespace WCell.RealmServer.NPCs
 				{
 					// spell casters get all ranks of a spell
 					chr.Spells.AddSpell(trainerSpell.Spell);
-					trainer.TalkToTrainer(chr);
+					//trainer.TalkToTrainer(chr);
 				}
 				else
 				{
@@ -793,6 +790,9 @@ namespace WCell.RealmServer.NPCs
 					chr.Spells.Replace(trainerSpell.Spell.PreviousRank, trainerSpell.Spell);
 				}
 			}
+
+			// Send a success packet to the client.
+			NPCHandler.SendTrainerBuySucceeded(chr.Client, trainer, trainerSpell);
 		}
 
 		private static bool CheckBuySpellConditions(this NPC trainer, Character curChar, TrainerSpellEntry trainerSpell)

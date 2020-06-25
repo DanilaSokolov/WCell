@@ -899,11 +899,17 @@ namespace WCell.RealmServer.Handlers
 					packet.Write((byte)trainerSpell.RequiredLevel);
 					packet.Write((uint)trainerSpell.RequiredSkillId);
 					packet.Write(trainerSpell.RequiredSkillAmount);
-					packet.Write((uint)trainerSpell.RequiredSpellId);
+					//packet.Write((uint)trainerSpell.RequiredSpellId);
 
 					// The following are infrequent Ids of some sort - Possibly spell replacements?
-					packet.Write(0u);
-					packet.Write(0u);
+					//packet.Write(0u);
+					//packet.Write(0u);
+					//++spellCount;
+
+					// The following are infrequent Ids of some sort - Possibly spell replacements?
+					packet.Write(spell.PreviousRank != null ? (uint)spell.PreviousRank.SpellId : 0);
+					packet.Write(spell.PreviousRank != null && spell.PreviousRank.PreviousRank != null ? (uint)spell.PreviousRank.PreviousRank.SpellId : 0);
+					packet.Write(spell.PreviousRank != null && spell.PreviousRank.PreviousRank != null && spell.PreviousRank.PreviousRank.PreviousRank != null ? (uint)spell.PreviousRank.PreviousRank.PreviousRank.SpellId : 0);
 					++spellCount;
 				}
 

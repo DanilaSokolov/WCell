@@ -310,6 +310,6 @@
   </Setting>
   <Setting>
     <Name>TheRubySanctum</Name>
-    <Type> </Type>
+    <Type>WCell.Addons.Default.Instances.TheRubySanctum</Type>
   </Setting>
 </Instances>

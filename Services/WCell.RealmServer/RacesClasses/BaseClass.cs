@@ -67,6 +67,14 @@ namespace WCell.RealmServer.RacesClasses
         }
 
         /// <summary>
+        /// Hardcoded for now, since we dont read from the Classes dbc file. DK has 165, others 0.
+        /// </summary>
+        public virtual uint IntroductionMovie
+        {
+            get { return 0; }
+        }
+
+        /// <summary>
         /// The PowerType this class uses.
         /// </summary>
         public virtual PowerType DefaultPowerType

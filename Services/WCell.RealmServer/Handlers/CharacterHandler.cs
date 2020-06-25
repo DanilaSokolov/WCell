@@ -1382,10 +1382,36 @@ namespace WCell.RealmServer.Handlers
 		public static void SendCinematic(Character chr)
 		{
 			using (var packet = new RealmPacketOut(RealmServerOpCode.SMSG_TRIGGER_CINEMATIC, 4))
-			{
-				packet.WriteUInt(chr.Archetype.Race.IntroductionMovie);
+			{				
+				if (chr.Class == ClassId.DeathKnight)
+				{
+                    packet.WriteUInt(chr.Archetype.Class.IntroductionMovie);
+                }
+				else
+				{
+					packet.WriteUInt(chr.Archetype.Race.IntroductionMovie);
+				}
+
 				chr.Client.Send(packet);
 			}
+		}
+
+		/// <summary>
+		/// Empty handler to avoid the warnings, opcode unknown
+		/// </summary>
+		[ClientPacketHandler(RealmServerOpCode.CMSG_COMPLETE_CINEMATIC)]
+		public static void HandleCompleteCinematic(IRealmClient client, RealmPacketIn packet)
+		{
+
+		}
+
+		/// <summary>
+		/// Empty handler to avoid the warnings, opcode unknown
+		/// </summary>
+		[ClientPacketHandler(RealmServerOpCode.CMSG_NEXT_CINEMATIC_CAMERA)]
+		public static void HandleNextCinematicCamera(IRealmClient client, RealmPacketIn packet)
+		{
+
 		}
 
 		/// <summary>
