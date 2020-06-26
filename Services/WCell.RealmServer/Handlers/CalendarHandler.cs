@@ -1,5 +1,20 @@
-namespace WCell.RealmServer.Handlers{}
-/*{
+using System;
+using WCell.Constants;
+using WCell.Constants.NPCs;
+using WCell.Constants.World;
+using WCell.Core.Network;
+using WCell.Core.Paths;
+using WCell.RealmServer.Entities;
+using WCell.RealmServer.NPCs.Vehicles;
+using WCell.RealmServer.Network;
+using WCell.RealmServer.Spells;
+using WCell.RealmServer.Spells.Auras;
+using WCell.Util;
+using WCell.Util.Graphics;
+using WCell.RealmServer;
+
+namespace WCell.RealmServer.Handlers
+{
     public class CalendarHandler
     {
         // Todo: Implement Calendar
@@ -17,7 +32,7 @@ namespace WCell.RealmServer.Handlers{}
         public static void HandleCalendarGetCalendar(IRealmClient client, RealmPacketIn packet)
         {
             //Console.WriteLine("RECEIVED CMSG_CALENDAR_GET_CALENDAR");
-            //SendCalendar(client);
+            SendCalendar(client);
         }
 
         [PacketHandler(RealmServerOpCode.CMSG_CALENDAR_ADD_EVENT)]
@@ -43,74 +58,74 @@ namespace WCell.RealmServer.Handlers{}
             }
         }
 
-        public static void SendCalendar (IPacketReceiver client)
+        public static void SendCalendar(IPacketReceiver client)
         {
             using (var packet = new RealmPacketOut(RealmServerOpCode.SMSG_CALENDAR_SEND_CALENDAR))
             {
-                var realmClient= (RealmClient)client;
+                var realmClient = (RealmClient)client;
 
-                packet.write(realmclient.ActiveCharacter.EventInvites.Count);
-                foreach (var eventInvite in realmclient.activecharacter.EventInvites)
-                {
-                    packet.Write(eventInvite.Id);
-                    packet.Write(eventInvite.Invitee);
-                    packet.Write(eventInvite.Byte1);
-                    packet.Write(eventInvite.Byte2);
-                    packet.Write(eventInvite.Byte3);
-                    packet.Write(eventInvite.PackedGuid);
-                }
-                packet.Write(realmClient.ActiveCharacter.Events.Count);
-                foreach (var evnt in realmClient.ActiveCharacter.Events)
-                {
-                    packet.Write((ulong)evnt.Id);
-                    packet.Write(evnt.Name);
-                    packet.Write((uint)0); // unknown1
-                    packet.Write((uint)0); // unknown2
-                    packet.Write((uint)evnt.Flags);
-                    packet.Write((uint)0); // unknown3
-                    packet.Write(evnt.PackedGuid); // player id or date or invitee id
-                }
-                packet.Write(Utility.GetSystemTimeLong());// probably wrong
-                packet.Write((uint)Utility.GetDateTimeToGameTime(new DateTime()));
+                //packet.Write(realmClient.ActiveCharacter.EventInvites.Count);
+                //foreach (var eventInvite in realmClient.activecharacter.EventInvites)
+                //{
+                //    packet.Write(eventInvite.Id);
+                //    packet.Write(eventInvite.Invitee);
+                //    packet.Write(eventInvite.Byte1);
+                //    packet.Write(eventInvite.Byte2);
+                //    packet.Write(eventInvite.Byte3);
+                //    packet.Write(eventInvite.PackedGuid);
+                //}
+                //packet.Write(realmClient.ActiveCharacter.Events.Count);
+                //foreach (var evnt in realmClient.ActiveCharacter.Events)
+                //{
+                //    packet.Write((ulong)evnt.Id);
+                //    packet.Write(evnt.Name);
+                //    packet.Write((uint)0); // unknown1
+                //    packet.Write((uint)0); // unknown2
+                //    packet.Write((uint)evnt.Flags);
+                //    packet.Write((uint)0); // unknown3
+                //    packet.Write(evnt.PackedGuid); // player id or date or invitee id
+                //}
+                //packet.Write(Utility.GetSystemTimeLong());// probably wrong
+                //packet.Write((uint)Utility.GetDateTimeToGameTime(new DateTime()));
 
-                packet.Write(realmClient.ActiveCharacter.Instances.Instances.Count);
-                foreach (var instance in realmClient.ActiveCharacter.Instances)
-                {
-                    packet.Write((uint)instance.Id);
-                    packet.Write((uint)instance.DungeonMode);
-                    packet.Write(Utility.GetDateTimeToGameTime(instance.ExpiryTime));
-                    packet.Write(instance.InstanceId);
-                }
+                //packet.Write(realmClient.ActiveCharacter.Instances.Instances.Count);
+                //foreach (var instance in realmClient.ActiveCharacter.Instances)
+                //{
+                //    packet.Write((uint)instance.Id);
+                //    packet.Write((uint)instance.DungeonMode);
+                //    packet.Write(Utility.GetDateTimeToGameTime(instance.ExpiryTime));
+                //    packet.Write(instance.InstanceId);
+                //}
 
-                packet.Write(realmClient.ActiveCharacter.InstancesToReset.Count); //or raids
-                foreach (var raid in instancestoreset)
-                {
-                    packet.Write(raid.Id);
-                    packet.Write(raid.resettime);
-                    packet.Write((uint)0); // unknown
-                }
-                packet.Write(count5);
-                foreach (var count5 in count5)
-                {
-                    packet.Write((uint)0); //unknown1
-                    packet.Write((uint)0); //unknown2
-                    packet.Write((uint)0); //unknown3
-                    packet.Write((uint)0); //unknown4
-                    packet.Write((uint)0); //unknown5
-                    for (int i = 0; i < 26; i++)
-                    {
-                        packet.Write(0); //unknown
-                    }
-                    for (int i = 0; i < 10; i++)
-                    {
-                        packet.Write(0); //unknown
-                    }
-                    for (int i = 0; i < 10; i++)
-                    {
-                        packet.Write(0); //unknown
-                    }
-                    packet.Write("unknown string");
-                }
+                //packet.Write(realmClient.ActiveCharacter.InstancesToReset.Count); //or raids
+                //foreach (var raid in instancestoreset)
+                //{
+                //    packet.Write(raid.Id);
+                //    packet.Write(raid.resettime);
+                //    packet.Write((uint)0); // unknown
+                //}
+                //packet.Write(count5);
+                //foreach (var count5 in count5)
+                //{
+                //    packet.Write((uint)0); //unknown1
+                //    packet.Write((uint)0); //unknown2
+                //    packet.Write((uint)0); //unknown3
+                //    packet.Write((uint)0); //unknown4
+                //    packet.Write((uint)0); //unknown5
+                //    for (int i = 0; i < 26; i++)
+                //    {
+                //        packet.Write(0); //unknown
+                //    }
+                //    for (int i = 0; i < 10; i++)
+                //    {
+                //        packet.Write(0); //unknown
+                //    }
+                //    for (int i = 0; i < 10; i++)
+                //    {
+                //        packet.Write(0); //unknown
+                //    }
+                //    packet.Write("unknown string");
+                //}
             }
         }
 
@@ -125,7 +140,6 @@ namespace WCell.RealmServer.Handlers{}
                 client.Send(packet);
             }
         }
-
     }
 }
 

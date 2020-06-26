@@ -29,6 +29,8 @@ namespace WCell.Addons.Default.Instances
         private static GOEntry __doodadUlIniverseGlobe01;
 
 		private static NPCEntry AlgalonTheObserver;
+        private static NPCEntry FlameLeviathanEntry;
+        private static NPCEntry XT002;
 
 		[Initialization]
 		[DependentInitialization(typeof(GOMgr))]
@@ -48,16 +50,23 @@ namespace WCell.Addons.Default.Instances
 		[DependentInitialization(typeof(NPCMgr))]
 		public static void InitNPCs()
 		{
-			AlgalonTheObserver = NPCMgr.GetEntry(NPCId.AlgalonTheObserver);
+            InitAlgalonTheObserver();
+            InitFlameLeviathan();
+        }
+
+        #region 10-Man AlgalonTheObserver Brain and AIAttack
+
+        private static void InitAlgalonTheObserver()
+        {
+            AlgalonTheObserver = NPCMgr.GetEntry(NPCId.AlgalonTheObserver);
             AlgalonTheObserver.BrainCreator = algalon => new AlgalonTheObserverBrain(algalon);
             AlgalonTheObserver.Activated += algalon =>
             {
                 ((BaseBrain)algalon.Brain).DefaultCombatAction.Strategy = new AlgalonTheObserverAIAttack(algalon);
             };
-		}
+        }
 
-
-		public class AlgalonTheObserverBrain : MobBrain
+        public class AlgalonTheObserverBrain : MobBrain
         {
             #region Text constant
             private const string TEXT_AGGRO = "Your actions are illogical. All possible results for this encounter have been calculated. The pantheon will receive the observer's message regardless outcome.";
@@ -85,9 +94,15 @@ namespace WCell.Addons.Default.Instances
             {
                 m_owner.Yell(TEXT_AGGRO);
                 m_owner.PlaySound((int)SOUND_AGGRO);
+                
                 __doodadUlIniverseGlobe01.Activated += dood =>
                 {
-                   
+                    var instance = dood.Map as Ulduar;
+                    if(instance != null)
+                    {
+                       
+                    }
+                    dood.State = GameObjectState.Disabled;
                 }; 
                 base.OnEnterCombat();
             }
@@ -167,7 +182,211 @@ namespace WCell.Addons.Default.Instances
 
             }
         }
+        #endregion
 
-	}
+        #region 10-Man Flame Leviathan Brain and AIAttack
+
+        private static void InitFlameLeviathan()
+        {
+            FlameLeviathanEntry = NPCMgr.GetEntry(NPCId.FlameLeviathan);
+            FlameLeviathanEntry.BrainCreator = flameLeviathan => new FlameLeviathanBrain(flameLeviathan);
+            FlameLeviathanEntry.Activated += flameLeviathan =>
+            {
+                ((BaseBrain)flameLeviathan.Brain).DefaultCombatAction.Strategy = new FlameLeviathanAIAttack(flameLeviathan);
+            };
+        }
+
+        public class FlameLeviathanBrain : MobBrain
+        {
+            #region Text constant
+             #endregion
+
+            #region Sound constant
+            private const int SOUND_AGGRO = 15506;
+            private const int SOUND_DEATH = 15520;
+            #endregion
+
+            [Initialization(InitializationPass.Second)]
+            public static void InitFlameLeviathan()
+            {
+
+            }
+
+            public FlameLeviathanBrain(NPC flameLeviathan)
+                : base(flameLeviathan)
+            {
+
+            }
+
+            public override void OnEnterCombat()
+            {
+                //m_owner.Yell(TEXT_AGGRO);
+                m_owner.PlaySound((int)SOUND_AGGRO);
+                
+                base.OnEnterCombat();
+            }
+
+
+
+            public override void OnDeath()
+            {
+                //m_owner.Yell(TEXT_DEATH);
+                m_owner.PlaySound(SOUND_DEATH);
+                base.OnDeath();
+            }
+
+        }
+
+        public class FlameLeviathanAIAttack : AIAttackAction
+        {
+            public FlameLeviathanAIAttack(NPC flameLeviathan)
+                : base(flameLeviathan)
+            {
+
+            }          
+
+            [Initialization(InitializationPass.Second)]
+            public static void InitFlameLeviathan()
+            {
+               
+            }
+
+            public override void Start()
+            {
+               
+
+                base.Start();
+            }
+            public override void Update()
+            {
+                
+                base.Update();
+            }
+
+            public override void Stop()
+            {
+
+                base.Stop();
+            }
+
+            public void CheckSpellCast()
+            {
+               
+
+            }
+
+            public void CheckHealth()
+            {
+
+
+            }
+
+            public void FetchTowers()
+            {
+
+            }
+        }
+        #endregion
+
+        #region 10-Man XT-002 Brain and AIAttack
+
+        private static void InitXT002()
+        {
+            XT002 = NPCMgr.GetEntry(NPCId.XT002Deconstructor);
+            XT002.BrainCreator = xt002 => new XT002Brain(xt002);
+            XT002.Activated += xt002 =>
+            {
+                ((BaseBrain)xt002.Brain).DefaultCombatAction.Strategy = new XT002AIAttack(xt002);
+            };
+        }
+
+        public class XT002Brain : MobBrain
+        {
+            #region Text constant
+            #endregion
+
+            #region Sound constant
+            private const int SOUND_AGGRO = 15724;
+            private const int SOUND_BERSERK = 15730;
+            private const int SOUND_DEATH = 15731;
+            #endregion
+
+            [Initialization(InitializationPass.Second)]
+            public static void InitXT002()
+            {
+
+            }
+
+            public XT002Brain(NPC xt002)
+                : base(xt002)
+            {
+
+            }
+
+            public override void OnEnterCombat()
+            {
+                //m_owner.Yell(TEXT_AGGRO);
+                m_owner.PlaySound((int)SOUND_AGGRO);
+
+                base.OnEnterCombat();
+            }
+
+
+
+            public override void OnDeath()
+            {
+                //m_owner.Yell(TEXT_DEATH);
+                m_owner.PlaySound(SOUND_DEATH);
+                base.OnDeath();
+            }
+
+        }
+
+        public class XT002AIAttack : AIAttackAction
+        {
+            public XT002AIAttack(NPC xt002)
+                : base(xt002)
+            {
+
+            }
+
+            [Initialization(InitializationPass.Second)]
+            public static void InitXT002()
+            {
+
+            }
+
+            public override void Start()
+            {
+
+
+                base.Start();
+            }
+            public override void Update()
+            {
+
+                base.Update();
+            }
+
+            public override void Stop()
+            {
+
+                base.Stop();
+            }
+
+            public void CheckSpellCast()
+            {
+
+
+            }
+
+            public void CheckHealth()
+            {
+
+
+            }
+        }
+        #endregion
+    }
 
 }

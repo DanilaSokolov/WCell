@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography;
 using WCell.Addons.Default.Lang;
 using WCell.Constants.GameObjects;
 using WCell.Constants.NPCs;
@@ -8,12 +9,10 @@ using WCell.RealmServer.AI.Actions.Combat;
 using WCell.RealmServer.AI.Brains;
 using WCell.RealmServer.Entities;
 using WCell.RealmServer.GameObjects;
-using WCell.RealmServer.GameObjects.GOEntries;
 using WCell.RealmServer.Gossips;
 using WCell.RealmServer.Instances;
 using WCell.RealmServer.NPCs;
 using WCell.RealmServer.Spells;
-using WCell.RealmServer.Transports;
 using WCell.Util;
 using WCell.Util.Graphics;
 
@@ -41,6 +40,7 @@ namespace WCell.Addons.Default.Instances
 
         public static GOEntry iceWall;
         public static NPCEntry skyBreaker;
+      
         #region 
         public static Vector3[] MuradinExitPath =
        {
@@ -98,10 +98,13 @@ namespace WCell.Addons.Default.Instances
             MarrowgarEntry.Activated += marrowgar =>
             {
                 ((BaseBrain)marrowgar.Brain).DefaultCombatAction.Strategy = new MarrowgarAIAttackAction(marrowgar);
+                iceWall.Activated += iw =>
+                {
+                    iw.State = GameObjectState.Disabled;
+                };
             };
 
             skyBreaker = NPCMgr.GetEntry(NPCId.TheSkybreaker_2);
-            skyBreaker.Create();
 
             LadyDeathWhisperEntry = NPCMgr.GetEntry(NPCId.LadyDeathwhisper);
 
@@ -145,8 +148,6 @@ namespace WCell.Addons.Default.Instances
         public override void OnDeath()
         {
             base.OnDeath();
-
-
         }
     }
 

@@ -2041,11 +2041,11 @@ namespace WCell.Constants
 		/// <summary>
 		/// int - same as new last int sent in MSG_CORPSE_QUERY (corpse low guid)
 		/// </summary>
-		CMSG_CORPSE_MAP_POSITION_QUERY = 1206,
+		CMSG_CORPSE_TRANSPORT_QUERY = 1206, //old CMSG_CORPSE_MAP_POSITION_QUERY
 		/// <summary>
 		/// 4*float
 		/// </summary>
-		SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE = 1207,
+		SMSG_CORPSE_TRANSPORT_QUERY = 1207, //old SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE
 		/// <summary>
 		/// Not used anymore
 		/// lua_SetLFGRoles
@@ -2214,8 +2214,8 @@ namespace WCell.Constants
 		SMSG_USE_EQUIPMENT_SET_RESULT = 1238, // moved in 3.2.2, prev. 1228
 
 		// manu unks...
-		UMSG_UNKNOWN_1239 = 1239,
-		SMSG_UNKNOWN_1240 = 1240,
+		CMSG_FORCE_ANIM = 1239,
+		SMSG_FORCE_ANIM = 1240,
 		CMSG_CHAR_FACTION_CHANGE = 1241,
 		SMSG_CHAR_FACTION_CHANGE = 1242,
 		UMSG_UNKNOWN_1243 = 1243,

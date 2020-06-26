@@ -769,7 +769,7 @@ namespace WCell.RealmServer.Handlers
 			}
 		}
 
-		[ClientPacketHandler(RealmServerOpCode.CMSG_CORPSE_MAP_POSITION_QUERY)]
+		[ClientPacketHandler(RealmServerOpCode.CMSG_CORPSE_TRANSPORT_QUERY)]
 		public static void HandleCorpseMapQueryOpcode(IRealmClient client, RealmPacketIn packet)
 		{
 			var unk = packet.ReadUInt32(); // corpse low guid
@@ -779,7 +779,7 @@ namespace WCell.RealmServer.Handlers
 
 		public static void SendCorpseMapQueryResponse(IRealmClient client)
 		{
-			using (var packet = new RealmPacketOut(RealmServerOpCode.SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE, 16))
+			using (var packet = new RealmPacketOut(RealmServerOpCode.SMSG_CORPSE_TRANSPORT_QUERY, 16))
 			{
 				for (var i = 0; i < 4; i++)
 					packet.WriteFloat(0.0f); // unk

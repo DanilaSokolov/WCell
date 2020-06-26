@@ -14,7 +14,7 @@ namespace WCell.Addons.Default.Gossip.GuardGossip.Neutral
         public static void LoadDalaranMenu()
         {
             CreateDalaranGossipMenu(29254);
-            CreateDalaranGossipMenu(29255);
+            CreateDalaranGossipMenu(29255       );
             CreateDalaranGossipMenu(36774);
             CreateDalaranGossipMenu(32676);
             CreateDalaranGossipMenu(32679);
