@@ -81,7 +81,7 @@ namespace WCell.RealmServer.GameObjects
             if (go == null)
                 return;
 
-            if (!go.IsCloseEnough(chr, 5.0f)) // TODO: check if interaction distance is already defined somewhere
+            if (!go.IsCloseEnough(chr, 2.0f)) // TODO: check if interaction distance is already defined somewhere
                 return;
 
             chr.Achievements.CheckPossibleAchievementUpdates(AchievementCriteriaType.UseGameobject);

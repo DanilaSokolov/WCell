@@ -489,9 +489,9 @@ namespace WCell.Addons.Default.Instances
 
 			public override void OnEnterCombat()
 			{
-				
-				base.OnEnterCombat();
 				m_owner.PlaySound(SOUND_ATTACK);
+
+				base.OnEnterCombat();
 			}
 
 			public override void OnDeath()

@@ -1,5 +1,7 @@
+using NLog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using WCell.Constants;
 using WCell.Constants.LFG;
 using WCell.Core;
@@ -15,6 +17,8 @@ namespace WCell.RealmServer.Handlers
 	/// </summary>
 	public static class LFGHandler
 	{
+		private static readonly Logger log = LogManager.GetCurrentClassLogger();
+		
 		[ClientPacketHandler(RealmServerOpCode.CMSG_LFG_JOIN)]
 		public static void HandleJoin(IRealmClient client, RealmPacketIn packet)
 		{
@@ -52,12 +56,13 @@ namespace WCell.RealmServer.Handlers
 		public static void HandleSearchJoin(IRealmClient client, RealmPacketIn packet)
 		{
 			var dungeonId = packet.ReadUInt32();
+			log.Info(client);
 		}
 
 		[ClientPacketHandler(RealmServerOpCode.CMSG_LFG_SEARCH_LEAVE)]
 		public static void HandleSearchLeave(IRealmClient client, RealmPacketIn packet)
 		{
-
+			log.Info(client);
 		}
 
 		[ClientPacketHandler(RealmServerOpCode.CMSG_LFG_PROPOSAL_RESPONSE)]
@@ -113,6 +118,8 @@ namespace WCell.RealmServer.Handlers
 		{
 			// SMSG_LFG_SEARCH_RESULTS
 			// uint, uint, if (byte) { uint count, for (count) { long} }, uint count2, uint, for (count2) { long, uint flags, if (flags & 0x2) {string}, if (flags & 0x10) {for (3) byte}, if (flags & 0x80) {long, uint}}, uint count3, uint, for (count3) {long, uint flags, if (flags & 0x1) {byte, byte, byte, for (3) byte, uint, uint, uint, uint, uint, uint, float, float, uint, uint, uint, uint, uint, float, uint, uint, uint, uint, uint, uint}, if (flags&0x2) string, if (flags&0x4) byte, if (flags&0x8) long, if (flags&0x10) byte, if (flags&0x20) uint, if (flags&0x40) byte, if (flags& 0x80) {long, uint}}
+			log.Info($"{client}");
+
 		}
 
 		public static void SendProposalUpdate(IRealmClient client)
@@ -125,6 +132,7 @@ namespace WCell.RealmServer.Handlers
 		{
 			// SMSG_LFG_ROLE_CHECK_UPDATE
 			// uint, byte, for (byte) uint, byte, for (byte) { long, byte, uint, byte, }
+			log.Info(client);
 		}
 
 		public static void SendJoinResult(IRealmClient client)

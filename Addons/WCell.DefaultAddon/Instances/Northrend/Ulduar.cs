@@ -52,6 +52,7 @@ namespace WCell.Addons.Default.Instances
 		{
             InitAlgalonTheObserver();
             InitFlameLeviathan();
+            InitXT002();
         }
 
         #region 10-Man AlgalonTheObserver Brain and AIAttack
@@ -132,7 +133,7 @@ namespace WCell.Addons.Default.Instances
             private static bool isCosmicSmash;
 
             private DateTime timeSinceLastInterval;
-            private static int interval = 15;
+            private static int interval = 13;
 
             [Initialization(InitializationPass.Second)]
             public static void InitAlgalonTheObserver()
@@ -173,7 +174,7 @@ namespace WCell.Addons.Default.Instances
             public void CheckSpellCast()
             {
                 m_owner.SpellCast.Start(PhasePunch, false);
-                
+                Stop();
             }
 
             public void CheckHealth()
@@ -199,7 +200,7 @@ namespace WCell.Addons.Default.Instances
         public class FlameLeviathanBrain : MobBrain
         {
             #region Text constant
-             #endregion
+            #endregion
 
             #region Sound constant
             private const int SOUND_AGGRO = 15506;
@@ -234,7 +235,6 @@ namespace WCell.Addons.Default.Instances
                 m_owner.PlaySound(SOUND_DEATH);
                 base.OnDeath();
             }
-
         }
 
         public class FlameLeviathanAIAttack : AIAttackAction
@@ -242,24 +242,31 @@ namespace WCell.Addons.Default.Instances
             public FlameLeviathanAIAttack(NPC flameLeviathan)
                 : base(flameLeviathan)
             {
+                
+            }
 
-            }          
+            private static Spell MissileBarrage, Pursued;
+
+            private static DateTime timePursuedInterval;
+
+            private static int interval = 28;
 
             [Initialization(InitializationPass.Second)]
             public static void InitFlameLeviathan()
             {
-               
+                MissileBarrage = SpellHandler.Get(SpellId.MissileBarrage);
+                Pursued = SpellHandler.Get(SpellId.Pursued);
             }
 
             public override void Start()
             {
-               
-
+                timePursuedInterval = DateTime.Now;
                 base.Start();
             }
             public override void Update()
             {
-                
+                m_owner.SpellCast.Start(MissileBarrage, true);
+
                 base.Update();
             }
 
@@ -272,7 +279,14 @@ namespace WCell.Addons.Default.Instances
             public void CheckSpellCast()
             {
                
+                var timeNow = DateTime.Now;
+                var timeBetween = timeNow - timePursuedInterval;
 
+                if (timeBetween.TotalSeconds >= interval)
+                {
+                    m_owner.SpellCast.Start(Pursued, false);
+
+                }
             }
 
             public void CheckHealth()

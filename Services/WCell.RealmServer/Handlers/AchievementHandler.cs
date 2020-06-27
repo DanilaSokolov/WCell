@@ -122,7 +122,7 @@ namespace WCell.RealmServer.Handlers
 			}
 			packet.WriteInt(0xFFFFFFFFu);
 
-			/*foreach (AchievementProgressRecord achievementProgressRecord in chr.Achievements.m_achivement_progress.Values)
+			foreach (AchievementProgressRecord achievementProgressRecord in chr.Achievements.m_progressRecords.Values)
 			{
 
 				packet.WriteUInt((uint)achievementProgressRecord.AchievementCriteriaId);
@@ -134,7 +134,7 @@ namespace WCell.RealmServer.Handlers
 				packet.Write(0);
 
 			}
-			packet.Write(0xFFFFFFFFu);*/
+			packet.Write(0xFFFFFFFFu);
 		}
 	}
 }
